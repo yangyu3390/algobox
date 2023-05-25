@@ -102,8 +102,21 @@ class TrieNode {
 };
 
 template <typename T>
-class TrieNodeWithValue : public TrieNode {
-
+class TrieNodeTerminal : public TrieNode {
+    public:
+    /**
+     * @brief convert TrieNode to TrieNodeTerminal. TrieNodeTerminal is used to store a trie node with value
+     * 
+    */
+    TrieNodeTerminal(char key, T value): TrieNode(key), m_value(value) {
+        m_is_end = true;
+    }
+    TrieNodeTerminal(TrieNode&& other, T value): TrieNode(std::forward<TrieNode>(other)), m_value(value) {
+        m_is_end = true;
+    }
+    ~TrieNodeTerminal()=default;
+    private:
+    T m_value;
 };
 
 template <typename T>
