@@ -111,17 +111,110 @@ class TrieNodeTerminal : public TrieNode {
     TrieNodeTerminal(char key, T value): TrieNode(key), m_value(value) {
         m_is_end = true;
     }
+    
     TrieNodeTerminal(TrieNode&& other, T value): TrieNode(std::forward<TrieNode>(other)), m_value(value) {
         m_is_end = true;
     }
-    ~TrieNodeTerminal()=default;
+    
+    ~TrieNodeTerminal() override = default;
+    
+    T GetValue() const {
+        return m_value;
+    }
+
     private:
     T m_value;
 };
 
 template <typename T>
 class Trie {
+    public:
+    /**
+   * TODO(P0): Add implementation
+   *
+   * @brief Construct a new Trie object. Initialize the root node with '\0'
+   * character.
+   */
+  Trie() {
+    root_ = std::make_unique<TrieNode>('\0');
+  };
 
+  /**
+   * @brief Insert key-value pair into the trie.
+   *
+   * If the key is an empty string, return false immediately.
+   *
+   * If the key already exists, return false. Duplicated keys are not allowed and
+   * you should never overwrite value of an existing key.
+   *
+   * When you reach the ending character of a key:
+   * 1. If TrieNode with this ending character does not exist, create new TrieNodeWithValue
+   * and add it to parent node's children_ map.
+   * 2. If the terminal node is a TrieNode, then convert it into TrieNodeWithValue by
+   * invoking the appropriate constructor.
+   * 3. If it is already a TrieNodeWithValue,
+   * then insertion fails and returns false. Do not overwrite existing data with new data.
+   *
+   * You can quickly check whether a TrieNode pointer holds TrieNode or TrieNodeWithValue
+   * by checking the is_end_ flag. If is_end_ == false, then it points to TrieNode. If
+   * is_end_ == true, it points to TrieNodeWithValue.
+   *
+   * @param key Key used to traverse the trie and find the correct node
+   * @param value Value to be inserted
+   * @return True if insertion succeeds, false if the key already exists
+   */
+  template <typename T>
+  bool Insert(const std::string &key, T value) {
+    
+  }
+
+  /**
+   * @brief Remove key value pair from the trie.
+   * This function should also remove nodes that are no longer part of another
+   * key. If key is empty or not found, return false.
+   *
+   * You should:
+   * 1) Find the terminal node for the given key.
+   * 2) If this terminal node does not have any children, remove it from its
+   * parent's children_ map.
+   * 3) Recursively remove nodes that have no children and are not terminal node
+   * of another key.
+   *
+   * @param key Key used to traverse the trie and find the correct node
+   * @return True if the key exists and is removed, false otherwise
+   */
+  bool Remove(const std::string &key) { 
+  
+  }
+
+bool remove_inner(const std::string &key, size_t i, std::unique_ptr<TrieNode> *curr, bool *success) {
+
+}
+  /**
+   * @brief Get the corresponding value of type T given its key.
+   * If key is empty, set success to false.
+   * If key does not exist in trie, set success to false.
+   * If the given type T is not the same as the value type stored in TrieNodeWithValue
+   * (ie. GetValue<int> is called but terminal node holds std::string),
+   * set success to false.
+   *
+   * To check whether the two types are the same, dynamic_cast
+   * the terminal TrieNode to TrieNodeWithValue<T>. If the casted result
+   * is not nullptr, then type T is the correct type.
+   *
+   * @param key Key used to traverse the trie and find the correct node
+   * @param success Whether GetValue is successful or not
+   * @return Value of type T if type matches
+   */
+  template <typename T>
+  T GetValue(const std::string &key, bool *success) {
+    
+  }
+  private:
+  /* Root node of the trie */
+  std::unique_ptr<TrieNode> m_root;
+  /* Read-write lock for the trie */
+  std::shared_mutex mutex_;
 };
     
 }
